@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import render
 from django.urls import path
 from django.http import Http404, HttpResponse
 
@@ -32,17 +33,16 @@ def index(request):
 
 
 def book_list(request):
-    book_text = ''
+    # book_text = ''
+    #
+    # for i in range(0, 10):
+    #     book_text += f'book {i}<br>'
 
-    for i in range(0, 10):
-        book_text += f'book {i}<br>'
-
-    return HttpResponse(book_text)
+    return render(request, 'book_list.html', {'range': range(0, 10)})
 
 
 def book(request, num):
-    book_text = f'book {num}번 페이지입니다.'
-    return HttpResponse(book_text)
+    return render(request, 'book_detail.html', {'num': num})
 
 
 def language(request, lang):
@@ -76,9 +76,8 @@ def movie_detail(request, index):
         raise Http404
 
     movie = movie_list[index]
-
-    response_text = f'<h1>{movie["title"]}</h1> <p>감독: {movie["director"]}</p>'
-    return HttpResponse(response_text)
+    context = {'movie': movie}
+    return render(request, 'movie.html', context)
 
 
 urlpatterns = [

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+{#  {% for num in '0123456789'|make_list %}#}
+  {% for num in range %}
+    <h1>
+      <a href="/book_list/{{ num }}/">Book {{ num }}</a>
+    </h1>
+  {% endfor %}
+</body>
+</html>
