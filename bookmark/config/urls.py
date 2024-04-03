@@ -54,18 +54,20 @@ def python(request):
 
 
 def movies(request):
-    movie_titles = [
-        f'<a href="/movie/{index}/">{movie["title"]}</a>'
-        for index, movie in enumerate(movie_list)
-    ]
+    # movie_titles = [
+    #     f'<a href="/movie/{index}/">{movie["title"]}</a>'
+    #     for index, movie in enumerate(movie_list)
+    # ]
 
     # movie_titles = []
     # for movie in movie_list:
     #     movie_titles.append(movie['title'])
 
-    response_text = '<br>'.join(movie_titles)
+    # response_text = '<br>'.join(movie_titles)
 
-    return HttpResponse(response_text)
+    # return HttpResponse(response_text)
+    from django.shortcuts import render
+    return render(request, 'movies.html', {'movie_list': movie_list})
 
 
 def movie_detail(request, index):
