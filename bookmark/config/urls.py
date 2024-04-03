@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
+
+
+movie_list = [
+    {'title': '파묘', 'director': '장재현'},
+    {'title': '웡카', 'director': '폴 킹'},
+    {'title': '듄: 파트 2', 'director': '	드니 빌뇌브'},
+    {'title': '시민덕희', 'director': '박영주'},
+]
 
 
 def index(request):
@@ -45,6 +53,32 @@ def python(request):
     return HttpResponse('python 페이지 입니다.')
 
 
+def movies(request):
+    movie_titles = [
+        f'<a href="/movie/{index}/">{movie["title"]}</a>'
+        for index, movie in enumerate(movie_list)
+    ]
+
+    # movie_titles = []
+    # for movie in movie_list:
+    #     movie_titles.append(movie['title'])
+
+    response_text = '<br>'.join(movie_titles)
+
+    return HttpResponse(response_text)
+
+
+def movie_detail(request, index):
+    if index > len(movie_list) - 1:
+        # from django.http import Http404
+        raise Http404
+
+    movie = movie_list[index]
+
+    response_text = f'<h1>{movie["title"]}</h1> <p>감독: {movie["director"]}</p>'
+    return HttpResponse(response_text)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
@@ -52,4 +86,6 @@ urlpatterns = [
     path('book_list/<int:num>/', book),
     path('language/python/', python),
     path('language/<str:lang>/', language),
+    path('movie/', movies),
+    path('movie/<int:index>/', movie_detail),
 ]
