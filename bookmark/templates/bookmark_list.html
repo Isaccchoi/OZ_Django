@@ -6,6 +6,13 @@
 </head>
 <body>
   <h1>북마크 리스트 페이지입니다.</h1>
+  {% for bookmark in bookmarks %}
+    <p>
+      <a href="/bookmark/{{ bookmark.id }}/">
+        {{ bookmark.name }}
+      </a>
+    </p>
+  {% endfor %}
 
 </body>
 </html>
