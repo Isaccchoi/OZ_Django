@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import path
 from django.http import Http404, HttpResponse
 
@@ -80,6 +80,20 @@ def movie_detail(request, index):
     return render(request, 'movie.html', context)
 
 
+def gugu(request, num):
+    if num < 2:
+        # from django.shortcuts import redirect
+        return redirect('/gugu/2/')
+
+    context = {
+        'num': num,
+        'results': [(i, num * i) for i in range(1, 10)],
+        # 'range': range(1, 10)
+    }
+
+    return render(request, 'gugu.html', context)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
@@ -89,4 +103,5 @@ urlpatterns = [
     path('language/<str:lang>/', language),
     path('movie/', movies),
     path('movie/<int:index>/', movie_detail),
+    path('gugu/<int:num>/', gugu),
 ]
