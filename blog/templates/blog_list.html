@@ -9,7 +9,9 @@
 
   {% for blog in blogs %}
     <p>
-      <a>{{ blog.title }} - {{ blog.created_at }}</a>
+      <a href="{% url 'blog_detail' blog.pk %}">
+        {{ blog.title }} - <small>{{ blog.created_at | date:"Y-m-d" }}</small>
+      </a>
     </p>
   {% endfor %}
 </body>
