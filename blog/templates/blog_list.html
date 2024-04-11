@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1>블로그 목록</h1>
+
+  {% for blog in blogs %}
+    <p>
+      <a>{{ blog.title }} - {{ blog.created_at }}</a>
+    </p>
+  {% endfor %}
+</body>
+</html>
