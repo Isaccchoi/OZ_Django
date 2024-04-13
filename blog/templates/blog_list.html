@@ -6,9 +6,20 @@
 </head>
 <body>
 {#  <h1>블로그 목록 {{ count }}</h1>#}
+  <nav>
+    <div style="text-align: right">
+      {% if request.user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="POST" style="display: inline">
+          {% csrf_token %}
+          <button>로그아웃</button>
+        </form>
+        {{ request.user.username }}
+      {% else %}
+        <a href="{% url 'login' %}">로그인</a>
+      {% endif %}
+    </div>
+  </nav>
   <h1>블로그 목록</h1>
-
-  <h3>{{ request.user.username }}</h3>
 
   {% for blog in blogs %}
     <p>
