@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_http_methods
 
 from blog.forms import BlogForm
 from blog.models import Blog
@@ -68,6 +69,16 @@ def blog_update(request, pk):
     }
     return render(request, 'blog_update.html', context)
 
+
+@login_required()
+@require_http_methods(['POST'])
+def blog_delete(request, pk):
+    # if request.method != 'POST':
+    #     raise Http404
+    blog = get_object_or_404(Blog, pk=pk, author=request.user)
+    blog.delete()
+
+    return redirect(reverse('blog_list'))
 
 
 # 쿠키와 세션에서 사용한 blog_list
