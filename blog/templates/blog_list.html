@@ -15,15 +15,32 @@
   {% endfor %}
   <div>
     {% if page_object.has_previous %}
-      <a href="?page=1">&laquo 첫번째</a>
+      <a href="?page=1">&laquo; 첫번째</a>
       <a href="?page={{ page_object.previous_page_number }}">이전</a>
     {% endif %}
-    <span>
-      Page {{ page_object.number }} of {{ page_object.paginator.num_pages }}
-    </span>
+    {#  현재페이지 -2 = 2 > 1보다 크면 #}
+    {% if page_object.number|add:-2 > 1 %}
+      <a href="?page={{ page_object.number|add:-3 }}">&hellip;</a>
+    {% endif %}
+
+    {# 10페이지까지 1~10 #}
+    {% for i in page_object.paginator.page_range %}
+      {% if page_object.number == i %}
+        <span>(현재페이지)</span>
+{#    현재페이지-3 < i < 현재페이지+3    #}
+      {% elif i > page_object.number|add:-3 and i < page_object.number|add:3 %}
+        <a href="?page={{ i }}">{{ i }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {#  최대페이지(10) > 8(현재 페이지) + 2  #}
+    {% if page_object.paginator.num_pages > page_object.number|add:2 %}
+      <a href="?page={{ page_object.number|add:3 }}">&hellip;</a>
+    {% endif %}
+
     {% if page_object.has_next %}
       <a href="?page={{ page_object.next_page_number }}">다음</a>
-      <a href="?page={{ page_object.paginator.num_pages }}">마지막</a>
+      <a href="?page={{ page_object.paginator.num_pages }}">마지막 &raquo;</a>
     {% endif %}
   </div>
 {% endblock %}
