@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+  <h1>로그인</h1>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button>submit</button>
   </form>
-
-</body>
-</html>
+{% endblock %}
