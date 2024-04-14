@@ -6,11 +6,24 @@
     <a href="{% url 'blog_create' %}">생성</a>
   </p>
 
-  {% for blog in blogs %}
+  {% for blog in page_object %}
     <p>
       <a href="{% url 'blog_detail' blog.pk %}">
-        {{ blog.title }} - <small>{{ blog.created_at | date:"Y-m-d" }}</small>
+        ({{ blog.id }}){{ blog.title }} - <small>{{ blog.created_at | date:"Y-m-d" }}</small>
       </a>
     </p>
   {% endfor %}
+  <div>
+    {% if page_object.has_previous %}
+      <a href="?page=1">&laquo 첫번째</a>
+      <a href="?page={{ page_object.previous_page_number }}">이전</a>
+    {% endif %}
+    <span>
+      Page {{ page_object.number }} of {{ page_object.paginator.num_pages }}
+    </span>
+    {% if page_object.has_next %}
+      <a href="?page={{ page_object.next_page_number }}">다음</a>
+      <a href="?page={{ page_object.paginator.num_pages }}">마지막</a>
+    {% endif %}
+  </div>
 {% endblock %}
