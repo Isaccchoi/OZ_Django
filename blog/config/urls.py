@@ -50,6 +50,7 @@ urlpatterns = [
     path('cb/', cb_views.BlogListView.as_view(), name='cb_blog_list'),
     path('cb/<int:pk>/', cb_views.BlogDetailView.as_view(), name='cb_blog_detail'),
     path('cb/create/', cb_views.BlogCreateView.as_view(), name='cb_blog_create'),
+    path('cb/<int:pk>/update/', cb_views.BlogUpdateView.as_view(), name='cb_blog_update'),
 
     # auth
     path('accounts/', include("django.contrib.auth.urls")),
