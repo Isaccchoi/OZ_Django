@@ -3,12 +3,12 @@
   <h1>블로그 목록</h1>
 
   <p style="text-align: right">
-    <a href="{% url 'blog_create' %}">생성</a>
+    <a href="{% url 'blog:create' %}">생성</a>
   </p>
 
   {% for blog in object_list %}
     <p>
-      <a href="{% url 'blog_detail' blog.pk %}">
+      <a href="{% url 'blog:detail' blog.pk %}">
         ({{ blog.id }}){{ blog.title }} - <small>{{ blog.created_at | date:"Y-m-d" }}</small>
       </a>
     </p>

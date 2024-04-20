@@ -92,4 +92,4 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
         return queryset.filter(author=self.request.user)
 
     def get_success_url(self):
-        return reverse_lazy('blog_list')
+        return reverse_lazy('blog:list')

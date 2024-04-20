@@ -41,18 +41,9 @@ from member import views as member_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # FBV blog
-    # path('', views.blog_list, name="blog_list"),
-    # path('<int:pk>/', views.blog_detail, name="blog_detail"),
-    # path('create/', views.blog_create, name='blog_create'),
-    # path('<int:pk>/update/', views.blog_update, name='blog_update'),
-    # path('<int:pk>/delete/', views.blog_delete, name='blog_delete'),
 
-    # CBV blog
-    path('', cb_views.BlogListView.as_view(), name='blog_list'),
-    path('<int:pk>/', cb_views.BlogDetailView.as_view(), name='blog_detail'),
-    path('create/', cb_views.BlogCreateView.as_view(), name='blog_create'),
-    path('<int:pk>/update/', cb_views.BlogUpdateView.as_view(), name='blog_update'),
-    path('<int:pk>/delete/', cb_views.BlogDeleteView.as_view(), name='blog_delete'),
+    path('', include('blog.urls')),
+    path('fb/', include('blog.fbv_urls')),
 
     # auth
     path('accounts/', include("django.contrib.auth.urls")),

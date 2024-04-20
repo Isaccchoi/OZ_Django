@@ -4,9 +4,9 @@
 
   {% if request.user == blog.author %}
     <div style="text-align: right">
-      <a href="{% url 'blog_update' blog.pk %}">수정</a>
+      <a href="{% url 'blog:update' blog.pk %}">수정</a>
 
-      <form id="delete_form" action="{% url 'blog_delete' blog.pk %}" method="POST" style="display: inline">
+      <form id="delete_form" action="{% url 'blog:delete' blog.pk %}" method="POST" style="display: inline">
         {% csrf_token %}
         <button type="button" id="delete_btn">삭제</button>
       </form>
@@ -20,7 +20,7 @@
   <p>{{ blog.content }}</p>
 
 
-  <a href="{% url 'blog_list' %}">목록으로 돌아가기</a>
+  <a href="{% url 'blog:list' %}">목록으로 돌아가기</a>
 {% endblock %}
 
 {% block js %}
