@@ -7,15 +7,15 @@
   <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
 <body>
-  <nav class="d-flex justify-content-between">
+  <nav class="d-flex justify-content-between py-2 px-4 bg-black text-white">
     <div>
-      <a href="{% url "blog:list" %}">홈</a>
+      <a class="text-decoration-none text-white" href="{% url "blog:list" %}">홈</a>
     </div>
     <div style="text-align: right">
       {% if request.user.is_authenticated %}
-        <form action="{% url 'logout' %}" method="POST" style="display: inline">
+        <form action="{% url 'logout' %}" method="POST" class="d-inline">
           {% csrf_token %}
-          <button>로그아웃</button>
+          <button class="btn btn-danger btn-sm">로그아웃</button>
         </form>
         {{ request.user.username }}
       {% else %}
@@ -24,7 +24,9 @@
       {% endif %}
     </div>
   </nav>
-  {% block content %}{% endblock %}
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
   <footer>
 
   </footer>
