@@ -1,11 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>블로그 프로젝트</title>
+  <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
 <body>
-  <nav style="display: flex; justify-content: space-between">
+  <nav class="d-flex justify-content-between">
     <div>
       <a href="{% url "blog:list" %}">홈</a>
     </div>
@@ -26,6 +28,7 @@
   <footer>
 
   </footer>
+  <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
   {% block js %}{% endblock %}
 </body>
 </html>
