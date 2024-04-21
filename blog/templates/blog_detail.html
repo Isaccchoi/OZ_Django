@@ -19,7 +19,7 @@
     {{ blog.author.username }}
   </div>
   <hr>
-  <p>{{ blog.content }}</p>
+  <p>{{ blog.content | safe }}</p>
 
   <hr>
   {% if request.user.is_authenticated %}
