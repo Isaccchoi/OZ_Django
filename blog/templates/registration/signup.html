@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>회원가입</h1>
+  <h1 class="mt-2">회원가입</h1>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button>회원가입</button>
+    <button class="btn btn-primary">회원가입</button>
   </form>
+{% endblock %}
+{% block js %}
+  {% include 'form-js.html' %}
 {% endblock %}

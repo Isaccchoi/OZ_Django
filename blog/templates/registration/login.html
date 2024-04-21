@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>로그인</h1>
+  <h1 class="mt-2">로그인</h1>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button>submit</button>
+    <button class="btn btn-primary">submit</button>
   </form>
+{% endblock %}
+{% block js %}
+  {% include 'form-js.html' %}
 {% endblock %}

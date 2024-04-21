@@ -50,7 +50,7 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
-    template_name = 'blog_create.html'
+    template_name = 'blog_form.html'
     fields = ('category', 'title', 'content')
     # success_url = reverse_lazy('cb_blog_list')
 
@@ -63,10 +63,34 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     # def get_success_url(self):
     #     return reverse_lazy('cb_blog_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_title'] = '작성'
+        context['btn_name'] = '생성'
+        return context
+
+
+        # test_dict = {
+        #     'a': 1,
+        #     'b': 2,
+        #     'c': 3
+        # }
+
+    #     self.test(a=test_dict['a'], b=test_dict['b'], c=test_dict['c'])
+    #     self.test(**test_dict)
+    #
+    #     test_list = [1, 2, 3]
+    #     self.test(test_list[0], test_list[1], test_list[2])
+    #     self.test(*test_list)
+    #
+    #
+    #
+    # def test(self, a, b, c):
+    #     return
 
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
-    template_name = 'blog_update.html'
+    template_name = 'blog_form.html'
     fields = ('category', 'title', 'content')
 
     def get_queryset(self):
@@ -74,6 +98,12 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
         if self.request.user.is_superuser:
             return queryset
         return queryset.filter(author=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sub_title'] = '수정'
+        context['btn_name'] = '수정'
+        return context
 
     # def get_object(self, queryset=None):
     #     self.object = super().get_object(queryset)

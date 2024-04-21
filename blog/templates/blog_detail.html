@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-  <h1>{{ blog.title }}</h1>
+  <div class="mt-2 d-flex justify-content-between">
+    <h1>{{ blog.title }}</h1>
 
-  {% if request.user == blog.author or request.user.is_superuser %}
-    <div style="text-align: right">
-      <a href="{% url 'blog:update' blog.pk %}">수정</a>
+    {% if request.user == blog.author or request.user.is_superuser %}
+      <div>
+        <a class="btn btn-sm btn-warning" href="{% url 'blog:update' blog.pk %}">수정</a>
 
-      <form id="delete_form" action="{% url 'blog:delete' blog.pk %}" method="POST" style="display: inline">
-        {% csrf_token %}
-        <button type="button" id="delete_btn">삭제</button>
-      </form>
-    </div>
-  {% endif %}
+        <form id="delete_form" action="{% url 'blog:delete' blog.pk %}" method="POST" style="display: inline">
+          {% csrf_token %}
+          <button type="button" id="delete_btn" class="btn btn-sm btn-danger">삭제</button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
 
   <div style="text-align: right">
     {{ blog.author.username }}
@@ -19,8 +21,8 @@
   <hr>
   <p>{{ blog.content }}</p>
 
-
-  <a href="{% url 'blog:list' %}">목록으로 돌아가기</a>
+  <hr>
+  <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}
 
 {% block js %}
