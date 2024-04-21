@@ -32,19 +32,19 @@
     </form>
   {% endif %}
 
-  <div>
-    {% for comment in blog.comment_set.all %}
-      <div>
+  <div class="mb-2" id="comment_wrapper">
+    {% for comment in object_list %}
+      <div class="border-bottom">
         {{ comment.content }}
         <p class="text-end">
           <small>{{ comment.created_at | date:'Y-m-d H:i' }} | {{ comment.author.username }}</small>
         </p>
       </div>
     {% endfor %}
-
   </div>
 
-  <hr>
+  {% include 'pagination.html' with fragment='comment_wrapper' %}
+
   <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}
 
