@@ -1,11 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from blog.forms import CommentForm
-from blog.models import Blog
+from blog.models import Blog, Comment
 
 
 class BlogListView(ListView):
@@ -30,6 +31,7 @@ class BlogListView(ListView):
 
 class BlogDetailView(DetailView):
     model = Blog
+    queryset = Blog.objects.all().prefetch_related('comment_set', 'comment_set__author')
     template_name = 'blog_detail.html'
     # pk_url_kwarg = 'id'
 
@@ -148,3 +150,27 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('blog:list')
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+
+    def get(self, *args, **kwargs):
+        raise Http404
+
+    def form_valid(self, form):
+        blog = self.get_blog()
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.blog = blog
+        self.object.save()
+        return HttpResponseRedirect(reverse('blog:detail', kwargs={'pk': blog.pk}))
+
+    def get_blog(self):
+        pk = self.kwargs['blog_pk']
+        blog = get_object_or_404(Blog, pk=pk)
+        return blog
+
+
+# /comment/create/<int:blog_pk>/

@@ -23,7 +23,7 @@
 
   <hr>
   {% if request.user.is_authenticated %}
-    <form method="post">
+    <form method="post" action="{% url 'blog:comment_create' blog.pk %}">
       {% csrf_token %}
       {{ comment_form.as_p }}
       <div class="text-end">
