@@ -22,6 +22,29 @@
   <p>{{ blog.content }}</p>
 
   <hr>
+  {% if request.user.is_authenticated %}
+    <form method="post">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <div class="text-end">
+        <button class="btn btn-primary">작성</button>
+      </div>
+    </form>
+  {% endif %}
+
+  <div>
+    {% for comment in blog.comment_set.all %}
+      <div>
+        {{ comment.content }}
+        <p class="text-end">
+          <small>{{ comment.created_at | date:'Y-m-d H:i' }} | {{ comment.author.username }}</small>
+        </p>
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <hr>
   <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}
 
