@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from blog.forms import CommentForm
+from blog.forms import BlogForm, CommentForm
 from blog.models import Blog, Comment
 
 
@@ -83,7 +83,7 @@ class BlogDetailView(ListView):
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     template_name = 'blog_form.html'
-    fields = ('category', 'title', 'content')
+    form_class = BlogForm
     # success_url = reverse_lazy('cb_blog_list')
 
     def form_valid(self, form):
@@ -123,7 +123,8 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     template_name = 'blog_form.html'
-    fields = ('category', 'title', 'content')
+    # fields = ('category', 'title', 'content')
+    form_class = BlogForm
 
     def get_queryset(self):
         queryset = super().get_queryset()
