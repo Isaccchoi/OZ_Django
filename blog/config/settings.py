@@ -159,7 +159,7 @@ SUMMERNOTE_CONFIG = {
     # Or, you can set it to `False` to use SummernoteInplaceWidget by default - no iframe mode
     # In this case, you have to load Bootstrap/jQuery sources and dependencies manually.
     # Use this when you're already using Bootstrap/jQuery based themes.
-    'iframe': False,
+    'iframe': True,
 
     # You can put custom Summernote settings
     'summernote': {
