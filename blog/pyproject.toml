@@ -11,6 +11,7 @@ django = ">=5.0,<6.0"
 ipython = "^8.23.0"
 django-extensions = "^3.2.3"
 django-summernote = "^0.8.20.0"
+pillow = "^10.3.0"
 
 
 [build-system]

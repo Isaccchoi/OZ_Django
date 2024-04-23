@@ -18,6 +18,13 @@ class Blog(TimestampModel):
     title = models.CharField('제목', max_length=100)
     content = models.TextField('본문')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    image = models.ImageField('이미지', null=True, blank=True, upload_to='blog/%Y/%m/%d')
+    # 2024/4/23일
+    # blog/2024/4/23/이미지파일.jpg
+    # ImageField, FieldField와 같지만 이미지만 업로드하게 되어있다.
+    # varchar => 경로만 저장을 함
+
     # models.CASCADE => 같이 삭제
     # models.PROTECT => 삭제가 불가능함 (유저를 삭제하려고할때 블로그가 있으면 유저 삭제가 불가능)
     # models.SET_NULL => 널값을 넣습니다. => 유저 삭제시 블로그의 author가 null이 됨

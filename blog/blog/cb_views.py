@@ -132,6 +132,10 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
             return queryset
         return queryset.filter(author=self.request.user)
 
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sub_title'] = '수정'

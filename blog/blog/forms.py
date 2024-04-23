@@ -7,7 +7,7 @@ from blog.models import Blog, Comment
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ('category', 'title', 'content')
+        fields = ('category', 'title', 'image', 'content', )
         widgets = {
             'content': SummernoteWidget()
         }
