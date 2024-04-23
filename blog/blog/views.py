@@ -55,11 +55,14 @@ def blog_create(request):
 
 @login_required()
 def blog_update(request, pk):
-    blog = get_object_or_404(Blog, pk=pk, author=request.user)
+    if request.user.is_superuser:
+        blog = get_object_or_404(Blog, pk=pk)
+    else:
+        blog = get_object_or_404(Blog, pk=pk, author=request.user)
+
     # if request.user != blog.author:
     #     raise Http404
-
-    form = BlogForm(request.POST or None, instance=blog)
+    form = BlogForm(request.POST or None, request.FILES or None, instance=blog)
     if form.is_valid():
         blog = form.save()
         return redirect(reverse('fb:detail', kwargs={'pk': blog.pk}))
