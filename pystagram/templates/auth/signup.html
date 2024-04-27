@@ -12,12 +12,12 @@
           </div>
 
           {% for error in field.errors %}
-            <span>{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
           {% endfor %}
         </div>
       {% endfor %}
       {% for error in form.non_field_errors %}
-        <p>{{ error }}</p>
+        <p class="text-danger">{{ error }}</p>
       {% endfor %}
 
 
