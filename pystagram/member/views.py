@@ -1,14 +1,13 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.core import signing
 from django.core.signing import SignatureExpired, TimestampSigner
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
-from django.views import View
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from member.forms import SignupForm
+from member.forms import LoginForm, SignupForm
 from utils.email import send_email
 
 User = get_user_model()
@@ -66,3 +65,20 @@ def verify_email(request):
     # TODO: 나중에 Redirect 시키기
     # return redirect(reverse('login'))
     return render(request, 'auth/email_verified_done.html', {'user': user})
+
+
+class LoginView(FormView):
+    template_name = 'auth/login.html'
+    form_class = LoginForm
+    # TODO: 나중에 메인페이지로 Redirect 시키기
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        user = form.user
+        login(self.request, user)
+
+        next_page = self.request.GET.get('next')
+        if next_page:
+            return HttpResponseRedirect(next_page)
+
+        return HttpResponseRedirect(self.get_success_url())

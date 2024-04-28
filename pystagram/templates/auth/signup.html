@@ -4,23 +4,7 @@
     <h1 class="title">회원가입</h1>
     <form method="POST">
       {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group row mb-2">
-          <label class="form-label col-md-2" for="{{ field.auto_id }}">{{ field.label }}</label>
-          <div class="col-md-10">
-            {{ field }}
-          </div>
-
-          {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-          {% endfor %}
-        </div>
-      {% endfor %}
-      {% for error in form.non_field_errors %}
-        <p class="text-danger">{{ error }}</p>
-      {% endfor %}
-
-
+      {% include 'include/form.html' %}
       <button class="btn btn-primary">회원가입</button>
     </form>
   </div>

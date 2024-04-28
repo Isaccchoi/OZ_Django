@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1 class="title">로그인</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {% include 'include/form.html' %}
+    <button class="btn btn-primary">로그인</button>
+  </form>
+{% endblock %}

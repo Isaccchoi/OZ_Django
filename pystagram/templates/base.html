@@ -7,6 +7,26 @@
   <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 </head>
 <body>
+<nav class="d-flex justify-content-between py-2 px-4 bg-black text-white">
+  <div>
+    {#  TODO: main 연결  #}
+    <a href="" class="text-decoration-none text-white">Pystagram</a>
+  </div>
+  <div class="text-end">
+    {% if request.user.is_authenticated %}
+      {{ request.user.nickname }}
+      <form action="{% url 'logout' %}" method="post" class="d-inline ms-2">
+        {% csrf_token %}
+        <button class="btn btn-dark btn-sm">로그아웃</button>
+      </form>
+    {% else %}
+      <a class="btn btn-dark btn-sm" href="{% url 'signup' %}">회원가입</a>
+      <a class="btn btn-dark btn-sm" href="{% url 'login' %}">로그인</a>
+    {% endif %}
+  </div>
+
+</nav>
+
 <div class="container">
   {% block content %}{% endblock %}
 </div>

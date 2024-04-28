@@ -154,3 +154,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = SECRET["email"]["user"]
 EMAIL_HOST_PASSWORD = SECRET["email"]["password"]
+
+
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
