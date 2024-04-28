@@ -21,9 +21,13 @@ from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
 from member import views as member_views
+from post import views as post_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # post
+    path('', post_views.PostListView.as_view(), name='main'),
+
     # auth
     path('signup/', member_views.SignupView.as_view(), name='signup'),
     path('verify/', member_views.verify_email, name='verify_email'),

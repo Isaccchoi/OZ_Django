@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block style %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <style>
+    .post-image {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-10 offset-1 col-lg-6 offset-lg-3">
+      {% for post in object_list %}
+        <div class="swiper" style="max-height: 500px;">
+          <div class="border-1 swiper-wrapper">
+            {% for post_image in post.images.all %}
+              <div class="swiper-slide">
+                <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+  const swiper = new Swiper('.swiper', {
+    // Optional parameters
+    direction: 'horizontal',
+    loop: false,
+  
+    // If we need pagination
+    pagination: {
+      el: '.swiper-pagination',
+    },
+  });
+  </script>
+{% endblock %}

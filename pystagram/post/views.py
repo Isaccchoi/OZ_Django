@@ -1,3 +1,11 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 
-# Create your views here.
+from post.models import Post
+
+
+class PostListView(ListView):
+    queryset = Post.objects.all().select_related('user')
+    template_name = 'post/list.html'
+    paginate_by = 20
+    ordering = ('-created_at', )

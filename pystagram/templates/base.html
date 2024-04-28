@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <title>Pystagram</title>
   <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+  {% block style %}{% endblock %}
 </head>
 <body>
 <nav class="d-flex justify-content-between py-2 px-4 bg-black text-white">
   <div>
-    {#  TODO: main 연결  #}
-    <a href="" class="text-decoration-none text-white">Pystagram</a>
+    <a href="{% url 'main' %}" class="text-decoration-none text-white">Pystagram</a>
   </div>
   <div class="text-end">
     {% if request.user.is_authenticated %}
@@ -27,10 +27,11 @@
 
 </nav>
 
-<div class="container">
+<div class="container pt-3">
   {% block content %}{% endblock %}
 </div>
 
 <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+{% block js %}{% endblock %}
 </body>
 </html>
