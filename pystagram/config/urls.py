@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # auth
     path('signup/', member_views.SignupView.as_view(), name='signup'),
+    path('verify/', member_views.verify_email, name='verify_email'),
     # path('signup/done/', TemplateView.as_view(template_name='auth/signup_done.html'),
     #      name='signup_done'),
 
