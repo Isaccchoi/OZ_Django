@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block style %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
@@ -12,9 +13,9 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-10 offset-1 col-lg-6 offset-lg-3">
+    <div class="col-10 offset-1 col-lg-6 offset-lg-3 infinite-container">
       {% for post in object_list %}
-        <div class="border-bottom my-4">
+        <div class="border-bottom my-4 infinite-item">
           <div class="mb-2">
             <span class="p-2 border rounded-circle me-2">
               <i class="fa-solid fa-user" style="width: 16px; padding-left: 1px;"></i>
@@ -37,22 +38,33 @@
           </div>
         </div>
       {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="infinite-more-link d-none"></a>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
 
 {% block js %}
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'waypoints/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'waypoints/infinite.min.js' %}"></script>
   <script>
-  const swiper = new Swiper('.swiper', {
-    // Optional parameters
-    direction: 'horizontal',
-    loop: false,
+    const swiper = new Swiper('.swiper', {
+      // Optional parameters
+      direction: 'horizontal',
+      loop: false,
 
-    // If we need pagination
-    pagination: {
-      el: '.swiper-pagination',
-    },
-  });
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
+
+	  let infinite = new Waypoint.Infinite({
+      element: $('.infinite-container')[0],
+      offset: 'bottom-in-view'
+    })
   </script>
 {% endblock %}
