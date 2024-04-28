@@ -14,15 +14,27 @@
   <div class="row">
     <div class="col-10 offset-1 col-lg-6 offset-lg-3">
       {% for post in object_list %}
-        <div class="swiper" style="max-height: 500px;">
-          <div class="border-1 swiper-wrapper">
-            {% for post_image in post.images.all %}
-              <div class="swiper-slide">
-                <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
-              </div>
-            {% endfor %}
+        <div class="border-bottom my-4">
+          <div class="mb-2">
+            <span class="p-2 border rounded-circle me-2">
+              <i class="fa-solid fa-user" style="width: 16px; padding-left: 1px;"></i>
+            </span>
+            {{ post.user.nickname }}
           </div>
-          <div class="swiper-pagination"></div>
+          <div class="swiper" style="max-height: 500px;">
+            <div class="border-1 swiper-wrapper">
+              {% for post_image in post.images.all %}
+                <div class="swiper-slide">
+                  <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
+                </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+{#         TODO: like  #}
+          <div class="my-2">
+            {{ post.content | linebreaksbr }}
+          </div>
         </div>
       {% endfor %}
     </div>
@@ -36,7 +48,7 @@
     // Optional parameters
     direction: 'horizontal',
     loop: false,
-  
+
     // If we need pagination
     pagination: {
       el: '.swiper-pagination',
