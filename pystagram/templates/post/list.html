@@ -18,10 +18,10 @@
     </div>
     <div class="col-10 offset-1 col-lg-6 offset-lg-3 infinite-container">
       {% for post in object_list %}
-        <div class="border-bottom my-4 infinite-item">
+        <div class="border-bottom my-4 pb-2 infinite-item">
           <div class="mb-2">
             <span class="p-2 border rounded-circle me-2">
-              <i class="fa-solid fa-user" style="width: 16px; padding-left: 1px;"></i>
+              <i class="fa-solid fa-user" style="width: 16px; padding-left: 3px;"></i>
             </span>
             {{ post.user.nickname }}
             {% if post.user == request.user %}
@@ -43,6 +43,33 @@
 {#         TODO: like  #}
           <div class="my-2">
             {{ post.content | linebreaksbr }}
+          </div>
+          <div>
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-comment"></i>
+
+            <div>
+              <button class="add-comment">댓글 작성</button>
+            </div>
+          </div>
+          <div class="comment-form d-none">
+            {% if request.user.is_authenticated %}
+              <form action="{% url 'comment:create' post.pk %}" method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button class="btn btn-primary btn-sm">생성</button>
+              </form>
+            {% endif %}
+          </div>
+          <div class="mt-2">
+            {% for comment in post.comments.all %}
+              <p>
+                <span class="px-1 py-0 border rounded-circle me-2">
+                  <i class="fa-solid fa-user fa-xs" style="width: 8px; padding-left: 1px;"></i>
+                </span>
+                <strong>{{ comment.user }}</strong> {{ comment.content | linebreaksbr }}
+              </p>
+            {% endfor %}
           </div>
         </div>
       {% endfor %}
@@ -73,6 +100,10 @@
 	  let infinite = new Waypoint.Infinite({
       element: $('.infinite-container')[0],
       offset: 'bottom-in-view'
+    })
+
+    $('.add-comment').on('click', function(){
+		  $(this).parents('.infinite-item').find('.comment-form').toggleClass('d-none');
     })
   </script>
 {% endblock %}

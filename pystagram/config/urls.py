@@ -35,6 +35,10 @@ urlpatterns = [
     path('verify/', member_views.verify_email, name='verify_email'),
     path('login/', member_views.LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+
+    # include
+    path('comment/', include('post.comment_urls')),
+
     # path('signup/done/', TemplateView.as_view(template_name='auth/signup_done.html'),
     #      name='signup_done'),
 ]
