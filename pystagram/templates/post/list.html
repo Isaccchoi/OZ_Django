@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tag %}
 
 {% block style %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
@@ -40,17 +41,20 @@
             </div>
             <div class="swiper-pagination"></div>
           </div>
-{#         TODO: like  #}
-          <div class="my-2">
-            {{ post.content | linebreaksbr }}
+          <div class="mt-1">
+            <button class="border-0 bg-transparent rounded-3 like-btn{% add_like_class request.user post.likes.all %}" data-post-pk="{{ post.pk }}">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+
+            <button class="add-comment border-0 bg-transparent rounded-3">
+              <i class="fa-regular fa-comment"></i>
+            </button>
           </div>
           <div>
-            <i class="fa-regular fa-heart"></i>
-            <i class="fa-regular fa-comment"></i>
-
-            <div>
-              <button class="add-comment">댓글 작성</button>
-            </div>
+            {{ post.likes.count }} likes
+          </div>
+          <div class="my-2">
+            {{ post.content | linebreaksbr }}
           </div>
           <div class="comment-form d-none">
             {% if request.user.is_authenticated %}
@@ -104,6 +108,28 @@
 
     $('.add-comment').on('click', function(){
 		  $(this).parents('.infinite-item').find('.comment-form').toggleClass('d-none');
+    })
+
+    $('.like-btn').on('click', function() {
+		  const this_btn = $(this);
+
+		  $.ajax({
+          url: '{% url "toggle_like" %}',
+          method: 'post',
+          data: {
+			      'post_pk': $(this).data('post-pk')
+          },
+          success: function (res) {
+				    if(res.created) {
+			        this_btn.addClass('text-danger')
+            } else {
+						  this_btn.removeClass('text-danger')
+			      }
+		      },
+          error: function () {
+            console.log('error')
+          }
+      })
     })
   </script>
 {% endblock %}
