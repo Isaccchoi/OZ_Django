@@ -17,5 +17,12 @@ class PostImageForm(BootstrapModelForm):
 
 
 PostImageFormSet = inlineformset_factory(
-    Post, PostImage, form=PostImageForm, extra=1, can_delete=True
+    Post, PostImage, form=PostImageForm, extra=1, can_delete=True, min_num=1, max_num=5
 )
+
+
+formset = [
+    PostImageForm(),
+    PostImageForm(),
+    PostImageForm(),
+]

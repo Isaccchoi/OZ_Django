@@ -4,9 +4,53 @@
 {% block content %}
   <div class="row">
     <div class="col-10 offset-1 col-lg-6 offset-lg-3">
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+
+        <table class="table">
+          {{ formset.management_form }}
+          <thead>
+          <tr>
+            {% for field in formset.forms.0.visible_fields %}
+              <th class="text-xs">{{ field.label }}</th>
+            {% endfor %}
+          </tr>
+          </thead>
+          <tbody>
+            {% for form in formset.forms %}
+              <tr class="formset_row">
+                {% for field in form.visible_fields %}
+                  <td>
+                  {% if forloop.first %}
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                  {% endif %}
+
+                  {{ field.errors.as_ul }}
+
+                  {{ field }}
+                  
+                  {% if field.errors %}
+                    {% for error in field.errors %}
+                      <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                  {% endif %}
+
+                  </td>
+                {% endfor %}
+              </tr>
+              
+              {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                  <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+              
+            {% endfor %}
+          </tbody>
+        </table>
         <button class="btn btn-primary">저장</button>
       </form>
     </div>
@@ -16,4 +60,12 @@
 {% block js %}
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/jquery.formset.js' %}"></script>
+
+  <script>
+    $('.formset_row').formset({
+        addText: '추가하기',
+        deleteText: '삭제',
+        prefix: 'images'
+    })
+  </script>
 {% endblock %}

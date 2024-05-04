@@ -28,6 +28,7 @@ urlpatterns = [
     # post
     path('', post_views.PostListView.as_view(), name='main'),
     path('create/', post_views.PostCreateView.as_view(), name='create'),
+    path('<int:pk>/update/', post_views.PostUpdateView.as_view(), name='update'),
 
     # auth
     path('signup/', member_views.SignupView.as_view(), name='signup'),
