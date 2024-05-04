@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # post
     path('', post_views.PostListView.as_view(), name='main'),
+    path('create/', post_views.PostCreateView.as_view(), name='create'),
 
     # auth
     path('signup/', member_views.SignupView.as_view(), name='signup'),
