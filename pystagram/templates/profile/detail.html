@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block style %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <style>
+    .post-image {
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-10 offset-1 col-lg-6 offset-lg-3">
+      <div>
+        <span class="p-2 border rounded-circle me-2">
+          <i class="fa-solid fa-user" style="width: 16px; padding-left: 3px;"></i>
+        </span>
+        {{ object.nickname }}
+{#      TODO Follow button  #}
+        <button class="btn btn-primary btn-sm ms-3">Follow</button>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-4 text-center">{{ object.post_set.count }} posts</div>
+        {#      TODO Follows, Following  #}
+        <div class="col-4 text-center">0 followers</div>
+        <div class="col-4 text-center">0 following</div>
+      </div>
+
+      <div class="row mt-2">
+        {% for post in object.post_set.all %}
+          <div class="col-4">
+            <div class="swiper">
+              <div class="border-1 swiper-wrapper">
+                {% for post_image in post.images.all %}
+                  <div class="swiper-slide">
+                    <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      // Optional parameters
+      direction: 'horizontal',
+      loop: false,
+
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
+  </script>
+{% endblock %}

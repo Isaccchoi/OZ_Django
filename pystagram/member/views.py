@@ -5,7 +5,7 @@ from django.core.signing import SignatureExpired, TimestampSigner
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import DetailView, FormView
 
 from member.forms import LoginForm, SignupForm
 from utils.email import send_email
@@ -80,3 +80,11 @@ class LoginView(FormView):
             return HttpResponseRedirect(next_page)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class UserProfileView(DetailView):
+    model = User
+    template_name = 'profile/detail.html'
+    slug_field = 'nickname'
+    slug_url_kwarg = 'slug'
+    queryset = User.objects.all().prefetch_related('post_set', 'post_set__images')

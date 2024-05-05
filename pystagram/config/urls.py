@@ -41,6 +41,7 @@ urlpatterns = [
 
     # include
     path('comment/', include('post.comment_urls')),
+    path('profile/', include('member.urls')),
 
     # path('signup/done/', TemplateView.as_view(template_name='auth/signup_done.html'),
     #      name='signup_done'),
