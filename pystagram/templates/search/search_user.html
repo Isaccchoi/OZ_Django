@@ -3,10 +3,15 @@
   <h1>user</h1>
   {% include 'include/search_form.html' %}
   <div>
-    <ul>
-      {% for user in object_list %}
-        <li>{{ user.nickname }}</li>
-      {% endfor %}
-    </ul>
+    {% for user in object_list %}
+      <div class="my-4">
+        <a href="{% url 'profile:detail' user.nickname %}" class="text-decoration-none text-black">
+          <span class="p-2 border rounded-circle me-2">
+            <i class="fa-solid fa-user" style="width: 16px; padding-left: 3px;"></i>
+          </span>
+          {{ user.nickname }}
+        </a>
+      </div>
+    {% endfor %}
   </div>
 {% endblock %}

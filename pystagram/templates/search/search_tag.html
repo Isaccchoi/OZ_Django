@@ -1,12 +1,42 @@
 {% extends 'base.html' %}
+{% block style %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+{% endblock %}
+
 {% block content %}
   <h1>tag</h1>
   {% include 'include/search_form.html' %}
-  <div>
-    <ul>
-      {% for post in object_list %}
-        <li>{{ post.id }}</li>
-      {% endfor %}
-    </ul>
+
+  <div class="row mt-2">
+    {% for post in object_list %}
+      <div class="col-4 my-2">
+        <div class="swiper">
+          <div class="border-1 swiper-wrapper">
+            {% for post_image in post.images.all %}
+              <div class="swiper-slide">
+                <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper('.swiper', {
+      // Optional parameters
+      direction: 'horizontal',
+      loop: false,
+
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
+  </script>
 {% endblock %}
