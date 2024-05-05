@@ -31,13 +31,20 @@
             </button>
           </form>
         {% endif %}
-        
       </div>
 
       <div class="row mt-2">
         <div class="col-4 text-center">{{ object.post_set.count | intcomma }} posts</div>
-        <div class="col-4 text-center">{{ object.followers.count | intcomma }} followers</div>
-        <div class="col-4 text-center">{{ object.following.count | intcomma }} following</div>
+        <div class="col-4 text-center">
+          <button class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#followers-modal">
+            {{ object.followers.count | intcomma }} followers
+          </button>
+        </div>
+        <div class="col-4 text-center">
+          <button class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#following-modal">
+            {{ object.following.count | intcomma }} following
+          </button>
+        </div>
       </div>
 
       <div class="row mt-2">
@@ -57,6 +64,48 @@
         {% endfor %}
       </div>
     </div>
+  </div>
+
+  <div class="modal fade" id="followers-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Followers</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            {% for follower in object.followers.all %}
+              <li>{{ follower.nickname }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="following-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Following</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            {% for following in object.following.all %}
+              <li>{{ following.nickname }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>ㅅ
   </div>
 {% endblock %}
 
