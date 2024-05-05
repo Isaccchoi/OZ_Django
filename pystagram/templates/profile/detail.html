@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block style %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <style>
@@ -17,15 +18,26 @@
           <i class="fa-solid fa-user" style="width: 16px; padding-left: 3px;"></i>
         </span>
         {{ object.nickname }}
-{#      TODO Follow button  #}
-        <button class="btn btn-primary btn-sm ms-3">Follow</button>
+        
+        {% if object != request.user %}
+          <form action="{% url 'profile:follow' object.pk %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button class="btn btn-primary btn-sm ms-3">
+              {% if is_follow %}
+                Unfollow
+              {% else %}
+                Follow
+              {% endif %}
+            </button>
+          </form>
+        {% endif %}
+        
       </div>
 
       <div class="row mt-2">
-        <div class="col-4 text-center">{{ object.post_set.count }} posts</div>
-        {#      TODO Follows, Following  #}
-        <div class="col-4 text-center">0 followers</div>
-        <div class="col-4 text-center">0 following</div>
+        <div class="col-4 text-center">{{ object.post_set.count | intcomma }} posts</div>
+        <div class="col-4 text-center">{{ object.followers.count | intcomma }} followers</div>
+        <div class="col-4 text-center">{{ object.following.count | intcomma }} following</div>
       </div>
 
       <div class="row mt-2">

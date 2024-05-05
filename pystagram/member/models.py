@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+from utils.models import TimestampModel
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password):
@@ -35,6 +37,15 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     nickname = models.CharField('nickname', max_length=20, unique=True)
+    # 나를 팔로우 하는사람이 팔로워
+    # 내가 팔로우 하는사람이 팔로잉
+    # User N:N User
+    # a <=> b symmetrical = True
+    # a => b symmetrical = False
+    following = models.ManyToManyField(
+        'self', symmetrical=False, related_name='followers',
+        through='UserFollowing', through_fields=('from_user', 'to_user')
+    )
 
     objects = UserManager()
 
@@ -68,3 +79,16 @@ class User(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_admin
+
+
+class UserFollowing(TimestampModel):
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_followers')
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_following')
+
+    class Meta:
+        unique_together = ('to_user', 'from_user')
+    # to_user 1, from_user 2
+    # to_user 1, from_user 3
+    # to_user 1, from_user 4
+
+    # to_user 1, from_user 2 => 오류

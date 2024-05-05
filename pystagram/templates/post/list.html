@@ -24,7 +24,9 @@
             <span class="p-2 border rounded-circle me-2">
               <i class="fa-solid fa-user" style="width: 16px; padding-left: 3px;"></i>
             </span>
-            {{ post.user.nickname }}
+            <a href="{% url 'profile:detail' post.user.nickname %}" class="text-decoration-none text-black">
+              {{ post.user.nickname }}
+            </a>
             {% if post.user == request.user %}
               <a href="{% url 'update' post.pk %}" class="btn btn-warning btn-sm float-end">
                 수정

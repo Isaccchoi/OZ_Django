@@ -1,13 +1,16 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import signing
 from django.core.signing import SignatureExpired, TimestampSigner
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import DetailView, FormView
 
 from member.forms import LoginForm, SignupForm
+from member.models import UserFollowing
 from utils.email import send_email
 
 User = get_user_model()
@@ -87,4 +90,38 @@ class UserProfileView(DetailView):
     template_name = 'profile/detail.html'
     slug_field = 'nickname'
     slug_url_kwarg = 'slug'
-    queryset = User.objects.all().prefetch_related('post_set', 'post_set__images')
+    queryset = User.objects.all()\
+        .prefetch_related('post_set', 'post_set__images', 'following', 'followers')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            data['is_follow'] = UserFollowing.objects.filter(
+                to_user=self.object,
+                from_user=self.request.user
+            )
+
+        return data
+
+
+class UserFollowingView(LoginRequiredMixin, View):
+    def post(self, *args, **kwargs):
+        pk = kwargs.get('pk', 0)
+        to_user = get_object_or_404(User, pk=pk)
+
+        if to_user == self.request.user:
+            raise Http404
+
+        # 만약 이미 팔로우가 되어있으면 팔로우 취소 => UserFollowing row 삭제
+        # 안되어있으면 팔로우 시작 => UserFollowing row 생성
+        following, created = UserFollowing.objects.get_or_create(
+            to_user=to_user,
+            from_user=self.request.user
+        )
+
+        if not created:
+            following.delete()
+
+        return HttpResponseRedirect(
+            reverse('profile:detail', kwargs={'slug': to_user.nickname})
+        )
