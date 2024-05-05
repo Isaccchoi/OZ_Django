@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>tag</h1>
+  {% include 'include/search_form.html' %}
+  <div>
+    <ul>
+      {% for post in object_list %}
+        <li>{{ post.id }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<div>
+  <form method="get">
+    <div class="row">
+      <div class="col-3">
+        <select name="type" id="" class="form-control">
+          <option value="user"{% if request.GET.type == "user" %} selected{% endif %}>User</option>
+          <option value="tag"{% if request.GET.type == "tag" %} selected{% endif %}>Tag</option>
+        </select>
+      </div>
+      <div class="col-7">
+        <input type="text" name="q" placeholder="검색어" class="form-control" 
+               value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+      </div>
+      <div class="col-2">
+        <button class="btn btn-primary">
+          검색
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>user</h1>
+  {% include 'include/search_form.html' %}
+  <div>
+    <ul>
+      {% for user in object_list %}
+        <li>{{ user.nickname }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
