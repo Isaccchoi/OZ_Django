@@ -22,7 +22,7 @@ class Blog(TimestampModel):
     title = models.CharField('제목', max_length=100)
     content = models.TextField('본문')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    published_at = models.DateTimeField('배포 일시', null=True)
+    published_at = models.DateTimeField('배포 일시', null=True, blank=True)
 
     objects = PublishedManager()
     all_objects = Manager()
