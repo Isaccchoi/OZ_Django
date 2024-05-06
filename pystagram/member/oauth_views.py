@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model, login
 from django.core import signing
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.generic import RedirectView
 
@@ -44,31 +44,11 @@ def naver_callback(request):
     if NAVER_STATE != signing.loads(state):
         raise Http404
 
-    params = {
-        'grant_type': 'authorization_code',
-        'client_id': settings.NAVER_CLIENT_ID,
-        'client_secret': settings.NAVER_SECRET,
-        'code': code,
-        'state': state
-    }
+    access_token = get_naver_access_token(code, state)
+    profile_response = get_naver_profile(access_token)
 
-    response = requests.get(NAVER_TOKEN_URL, params=params)
-    result = response.json()
-    access_token = result.get('access_token')
-
-    print('token request', result)
-    headers = {
-        'Authorization': f'Bearer {access_token}'
-    }
-
-    response = requests.get(NAVER_PROFILE_URL, headers=headers)
-
-    if response.status_code != 200:
-        raise Http404
-
-    result = response.json()
-    print('profile request', result)
-    email = result.get('response').get('email')
+    print('profile request', profile_response)
+    email = profile_response.get('email')
 
     user = User.objects.filter(email=email).first()
 
@@ -79,3 +59,62 @@ def naver_callback(request):
 
         login(request, user)
         return redirect('main')
+    return redirect(
+        reverse('oauth:nickname') + f'?access_token={access_token}'
+    )
+
+
+def oauth_nickname(request):
+    access_token = request.GET.get('access_token')
+    if not access_token:
+        return redirect('login')
+
+    form = NicknameForm(request.POST or None)
+
+    if form.is_valid():
+        user = form.save(commit=False)
+
+        profile = get_naver_profile(access_token)
+        email = profile.get('email')
+
+        if User.objects.filter(email=email).exists():
+            raise Http404
+
+        user.email = email
+
+        user.is_active = True
+        user.set_password(User.objects.make_random_password())
+        user.save()
+
+        login(request, user)
+        return redirect('main')
+
+    return render(request, 'auth/nickname.html', {'form': form})
+
+
+def get_naver_access_token(code, state):
+    params = {
+        'grant_type': 'authorization_code',
+        'client_id': settings.NAVER_CLIENT_ID,
+        'client_secret': settings.NAVER_SECRET,
+        'code': code,
+        'state': state
+    }
+
+    response = requests.get(NAVER_TOKEN_URL, params=params)
+    result = response.json()
+    return result.get('access_token')
+
+
+def get_naver_profile(access_token):
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+
+    response = requests.get(NAVER_PROFILE_URL, headers=headers)
+
+    if response.status_code != 200:
+        raise Http404
+
+    result = response.json()
+    return result.get('response')

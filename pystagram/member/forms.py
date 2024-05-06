@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
+from utils.forms import BootstrapModelForm
+
 User = get_user_model()
 
 
@@ -73,6 +75,19 @@ class LoginForm(forms.Form):
 
         self.user = authenticate(email=email, password=password)
 
+        if not self.user:
+            raise forms.ValidationError('이메일 또는 패스워드가 올바르지 않습니다.')
+
         if not self.user.is_active:
             raise forms.ValidationError('유저가 인증되지 않았습니다.')
         return cleaned_data
+
+
+class NicknameForm(BootstrapModelForm):
+    class Meta:
+        model = User
+        fields = ('nickname', )
+
+        labels = {
+            'nickname': '닉네임을 입력하여 회원가입을 마무리해주세요.'
+        }

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div>
+    <form method="post">
+      {% csrf_token %}
+      {% include 'include/form.html' %}
+      <button class="btn btn-primary btn-sm">저장</button>
+    </form>
+  </div>
+{% endblock %}
