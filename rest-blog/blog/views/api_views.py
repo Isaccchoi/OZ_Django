@@ -4,8 +4,10 @@ from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from blog.models import Blog
+from rest_framework import viewsets
 
+from blog.models import Blog
+from blog.serializers import UserSerializer
 
 User = get_user_model()
 
@@ -36,3 +38,15 @@ def blog_list(request):
         }
 
         return JsonResponse(data, status=201)
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+# ReadOnlyModelViewset => List, Detail
+# ModelViewSet => List, Detail, PUT, PATH, CREATE, DELETE
+
+
+# /blog / GET => List / POST => Create
+# /blog/1 / GET => Detail / PUT, PATCH => Update / DELETE => Delete
