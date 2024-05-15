@@ -1,7 +1,9 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework.decorators import api_view, schema
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.schemas import AutoSchema
 from rest_framework.views import APIView
@@ -10,7 +12,9 @@ from blog.models import Blog
 from blog.serializers import BlogSerializer
 
 
-class BlogListAPIView(APIView):
+class BlogListCreateAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request, format=None):
         blog_list = Blog.objects.all().order_by('-created_at').select_related('author')
         paginator = PageNumberPagination()
@@ -18,6 +22,14 @@ class BlogListAPIView(APIView):
 
         serializer = BlogSerializer(queryset, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request):
+        serializer = BlogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BlogDetailAPIView(APIView):

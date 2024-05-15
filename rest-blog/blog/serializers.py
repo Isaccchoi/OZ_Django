@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
-    author = UserSerializer(many=False)
+    author = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Blog
