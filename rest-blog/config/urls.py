@@ -22,7 +22,8 @@ from blog import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('api/', include('blog.urls')),
+    path('viewset-api/', include('blog.urls.view_set_urls')),
+    path('api/', include('blog.urls.api_urls')),
 
     path('', views.BlogListView.as_view(), name='blog_list'),
     path('create/', views.BlogCreateView.as_view(), name='blog_create'),
