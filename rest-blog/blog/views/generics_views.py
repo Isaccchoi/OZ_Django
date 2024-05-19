@@ -2,11 +2,11 @@ from datetime import datetime
 
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from blog.models import Blog
-from blog.serializers import BlogSerializer
+from blog.models import Blog, Comment
+from blog.serializers import BlogSerializer, CommentSerializer
 from utils.permissions import IsAuthorOrReadOnly
 
 
@@ -29,3 +29,21 @@ class BlogListAPIView(BlogQuerySetMixin, ListCreateAPIView):
 
 class BlogRetrieveAPIView(BlogQuerySetMixin, RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthorOrReadOnly, ]
+
+
+class CommentListCreateAPIView(ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        blog = self.get_blog_object()
+        serializer.save(author=self.request.user, blog=blog)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        blog = self.get_blog_object()
+        return queryset.filter(blog=blog)
+
+    def get_blog_object(self):
+        return get_object_or_404(Blog, pk=self.kwargs.get('blog_pk'))
