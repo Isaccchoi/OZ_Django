@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('viewset-api/', include('blog.urls.view_set_urls')),
     path('api/', include('blog.urls.api_urls')),
+    path('generic-api/', include('blog.urls.generics_urls')),
 
     path('', views.BlogListView.as_view(), name='blog_list'),
     path('create/', views.BlogCreateView.as_view(), name='blog_create'),
