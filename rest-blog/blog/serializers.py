@@ -35,3 +35,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'author', 'content']
+
+
+class CommentUpdateSerializer(CommentSerializer):
+    blog = BlogSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'author', 'content', 'blog']
