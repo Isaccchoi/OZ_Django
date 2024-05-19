@@ -2,11 +2,12 @@ from datetime import datetime
 
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from blog.models import Blog
 from blog.serializers import BlogSerializer
+from utils.permissions import IsAuthorOrReadOnly
 
 
 class BlogQuerySetMixin:
@@ -21,9 +22,10 @@ class BlogQuerySetMixin:
         ).order_by('-created_at').select_related('author')
 
 
-class BlogListAPIView(BlogQuerySetMixin, ListAPIView):
-    pass
+class BlogListAPIView(BlogQuerySetMixin, ListCreateAPIView):
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
-class BlogRetrieveAPIView(BlogQuerySetMixin, RetrieveAPIView):
-    pass
+class BlogRetrieveAPIView(BlogQuerySetMixin, RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthorOrReadOnly, ]
