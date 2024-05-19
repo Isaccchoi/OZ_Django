@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 
 from blog.models import Blog
 from blog.serializers import BlogSerializer
+from utils.permissions import IsAuthorOrReadOnly
 
 
 class BlogListCreateAPIView(APIView):
@@ -33,7 +34,36 @@ class BlogListCreateAPIView(APIView):
 
 
 class BlogDetailAPIView(APIView):
+    object = None
+    permission_classes = [IsAuthorOrReadOnly,]
+
     def get(self, request, format=None, *args, **kwargs):
+        blog = self.get_object(request, *args, **kwargs)
+        serializer = BlogSerializer(blog, many=False)
+        return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        blog = self.get_object(request, *args, **kwargs)
+        serializer = BlogSerializer(blog, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        blog = self.get_object(request, *args, **kwargs)
+        blog.delete()
+
+        return Response({
+            'deleted': True,
+            'pk': kwargs.get('pk', 0)
+        }, status=status.HTTP_200_OK)
+
+    def get_object(self, request, *args, **kwargs):
+        if self.object:
+            return self.object
+
         blog_list = Blog.objects.all().select_related('author')
         pk = kwargs.get('pk', 0)
         # if not pk:
@@ -44,9 +74,8 @@ class BlogDetailAPIView(APIView):
         #     raise Http404
 
         blog = get_object_or_404(blog_list, pk=pk)
-
-        serializer = BlogSerializer(blog, many=False)
-        return Response(serializer.data)
+        self.object = blog
+        return blog
 
 
 @api_view(['GET'])
