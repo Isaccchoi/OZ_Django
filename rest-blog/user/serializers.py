@@ -7,6 +7,12 @@ from rest_framework import serializers
 User = get_user_model()
 
 
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']
+
+
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
