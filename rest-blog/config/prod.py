@@ -2,7 +2,7 @@ from .local import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1:8000']
+ALLOWED_HOSTS = ['jihyunchoi.pythonanywhere.com']
 
 
 DATABASES = {
