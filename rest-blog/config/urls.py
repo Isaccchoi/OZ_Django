@@ -19,6 +19,7 @@ from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from blog import views
+from user import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,8 @@ urlpatterns = [
 
     path('', views.BlogListView.as_view(), name='blog_list'),
     path('create/', views.BlogCreateView.as_view(), name='blog_create'),
+
+    path('signup', user_views.SignUpAPIView.as_view(), name='signup'),
 
     # jwt
     path('token', TokenObtainPairView.as_view(), name='token_obtain_pair'),

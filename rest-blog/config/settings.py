@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # own
     'blog',
+    'user',
 
     # 3rd party
     'rest_framework',
