@@ -1,2 +1,3 @@
 .idea/*
 .config_secret/*
+config/settings.py
