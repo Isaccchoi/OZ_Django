@@ -136,3 +136,125 @@ vi secret.json
 cd ..
 python manage.py runserver
 ```
+
+### Nginx 설정
+
+```shell
+sudo apt-get install software-properties-common
+sudo apt-get install nginx
+
+cd /etc/nginx/sites-available
+sudo rm default
+sudo vi pystagram.conf
+```
+
+아래 내용을 입력
+```
+server {
+        server_name EC2의 퍼블릭 DNS;
+        location / {
+                include proxy_params;
+                proxy_pass http://localhost:8000/;
+        }
+
+}
+```
+
+```shell
+sudo ln -sf /etc/nginx/sites-available/pystagram.conf /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx.service
+sudo systemctl status nginx.service
+```
+
+
+```shell
+cd ~/본인 프로젝트 경로
+python manage.py runserver
+```
+
+크롬에서 EC2의 퍼블릭 DNS로 접속하여 정상적으로 작동하는지 확인합니다.
+
+
+### Gunicorn 설정
+
+```shell
+pyenv virtualenv 3.7.3 gunicorn
+pyenv shell gunicorn
+pip install gunicorn
+cd ~/본인 프로젝트 경로
+poetry install
+```
+
+vi로 접속하여 gunicorn.service 파일 생성
+```shell
+sudo vi /etc/systemd/system/gunicorn.service
+```
+
+```
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/본인 프로젝트 경로
+ExecStart=ExecStart=/home/ubuntu/.pyenv/versions/gunicorn/bin/gunicorn \
+          --workers 3 \
+          --bind unix:/srv/gunicorn/gunicorn.sock config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+gunicorn deamon 설정
+```shell
+sudo systemctl daemon-reload
+sudo systemctl enable gunicorn
+```
+
+소켓 파일 경로 권한 설정
+```shell
+sudo chmod 777 /srv
+take /srv/gunicorn
+```
+
+nginx에 gunicorn 연결
+```shell
+sudo vi /etc/nginx/sites-available/pystagram.conf
+```
+
+```
+server {
+    server_name EC2의 퍼블릭 DNS;
+    location /static/ {
+        root /home/ubuntu/본인 프로젝트 경로;
+    }
+    location /media/ {
+        root /home/ubuntu/본인 프로젝트 경로;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/srv/gunicorn/gunicorn.sock;
+    }
+    listen 80;
+}
+```
+nginx 권한 설정
+```shell
+vi /etc/nginx/nginx.conf
+```
+```shell
+# user www-data 삭제;
+user ubuntu;
+```
+
+```shell
+sudo systemctl restart gunicorn nginx
+```
+
+nginx 에러 로그
+```shell
+sudo vi /var/log/nginx/error.log
+```
