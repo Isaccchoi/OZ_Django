@@ -1,3 +1,4 @@
 .idea/*
 .config_secret/*
 config/settings.py
+.static_root
