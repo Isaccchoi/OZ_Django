@@ -2,3 +2,4 @@
 .config_secret/*
 .python-version
 config/settings.py
+.static_root/*
