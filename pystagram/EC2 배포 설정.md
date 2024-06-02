@@ -276,3 +276,26 @@ sudo vi /var/log/nginx/error.log
     ]
 }
 ```
+
+### S3 Permission CORS
+```json
+[
+    {
+        "AllowedHeaders": [
+            "Content-*",
+            "HOST"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "HEAD"
+        ],
+        "AllowedOrigins": [
+            "http://본인 EC2 IP",
+            "http://본인 도메인",
+            "https://본인 도메인"
+        ],
+        "ExposeHeaders": [],
+        "MaxAgeSeconds": 30000
+    }
+]
+```
