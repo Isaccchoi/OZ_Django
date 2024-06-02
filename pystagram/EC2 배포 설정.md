@@ -258,3 +258,21 @@ nginx 에러 로그
 ```shell
 sudo vi /var/log/nginx/error.log
 ```
+
+### S3 permission Bucket Policy
+```json
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::본인 버킷 이름/*"
+        }
+    ]
+}
+```
